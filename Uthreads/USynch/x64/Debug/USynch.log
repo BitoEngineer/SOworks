@@ -1,0 +1,12 @@
+﻿     Creating library C:\Users\BitoEngineer\Desktop\Faculdade\SO\2º Trabalho\Parte I\Uthreads\x64\Debug\USynch.lib and object C:\Users\BitoEngineer\Desktop\Faculdade\SO\2º Trabalho\Parte I\Uthreads\x64\Debug\USynch.exp
+Semaphore.obj : error LNK2019: unresolved external symbol __imp_UtSelf referenced in function InitializeWaitBlock
+Mutex.obj : error LNK2001: unresolved external symbol __imp_UtSelf
+Event.obj : error LNK2001: unresolved external symbol __imp_UtSelf
+Semaphore.obj : error LNK2019: unresolved external symbol __imp_UtDeactivate referenced in function SemaphoreAcquire
+Mutex.obj : error LNK2001: unresolved external symbol __imp_UtDeactivate
+Event.obj : error LNK2001: unresolved external symbol __imp_UtDeactivate
+Semaphore.obj : error LNK2019: unresolved external symbol __imp_UtActivate referenced in function SemaphoreRelease
+Mutex.obj : error LNK2001: unresolved external symbol __imp_UtActivate
+Event.obj : error LNK2001: unresolved external symbol __imp_UtActivate
+C:\Users\BitoEngineer\Desktop\Faculdade\SO\2º Trabalho\Parte I\Uthreads\Debug\UThread.lib : warning LNK4272: library machine type 'X86' conflicts with target machine type 'x64'
+C:\Users\BitoEngineer\Desktop\Faculdade\SO\2º Trabalho\Parte I\Uthreads\x64\Debug\USynch.dll : fatal error LNK1120: 3 unresolved externals
