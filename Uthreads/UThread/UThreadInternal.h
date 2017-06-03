@@ -63,6 +63,7 @@ typedef struct _UTHREAD {
 	LIST_ENTRY       Link;
 	UT_FUNCTION      Function;   
 	UT_ARGUMENT      Argument; 
+	LIST_ENTRY		 Joiners;
 	PUCHAR           Stack;
 	INT				 State; //Define the current state of the UTHREAD : '0'=  Running| '1'= Ready | '2'=Blocked 
 	LIST_ENTRY		 AliveLink; //Link node to the alive threads

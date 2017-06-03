@@ -48,7 +48,7 @@ static
 PUTHREAD RunningThread;
 
 //States
-INT RUNNING = 0, READY = 1, BLOCKED = 2;
+const INT RUNNING = 0, READY = 1, BLOCKED = 2;
 
 //
 // The user thread proxy of the underlying operating system thread. This
@@ -209,6 +209,12 @@ VOID UtRun () {
 VOID UtExit () {
 	NumberOfThreads -= 1;	
 	RemoveEntryList(&RunningThread->AliveLink);
+	// awake joined threads
+	while (!IsListEmpty(&RunningThread->Joiners)) {
+		PLIST_ENTRY tlink = RemoveHeadList(&RunningThread->Joiners);
+		PUTHREAD thread = CONTAINING_RECORD(tlink, UTHREAD, Link);
+		UtActivate(thread);
+	}
 	InternalExit(RunningThread, ExtractNextReadyThread());
 	_ASSERTE(!"Supposed to be here!");
 }
@@ -223,12 +229,22 @@ VOID UtExit () {
 BOOL UtMultJoin(HANDLE handle[], int size) {
 	for (int i = 0; i < size;++i) {
 		//Is thread alive or is correspondent to the calling thread
-		if (!UtAlive(handle[i])  ||  handle[i]==RunningThread) {
+		if (!UtAlive(handle[i])  ||  (PUTHREAD)handle[i]==RunningThread) {
 			return FALSE;
 		}
-		//Transiction from RUNNING to BLOCKED
 	}
 
+	//Transiction from RUNNING to BLOCKED
+	InsertTailList(&((PUTHREAD)handle[0])->Joiners, &RunningThread->Link);
+	((PUTHREAD)handle[0])->State = BLOCKED;
+
+	for (int i = 1; i < size;++i) {
+		InsertTailList(&((PUTHREAD)handle[i])->Joiners, &((PUTHREAD)handle[i-1])->Link);
+		((PUTHREAD)handle[i])->State = BLOCKED;
+	}
+
+	InsertHeadList(&ReadyQueue, &((PUTHREAD)handle[size - 1])->Link);
+	UtDeactivate();
 	return TRUE;
 }
 
@@ -273,7 +289,7 @@ VOID UtSwitchTo(HANDLE threadToRun) {
 VOID UtYield () {
 	if (!IsListEmpty(&ReadyQueue)) {
 		InsertTailList(&ReadyQueue, &RunningThread->Link);
-		RunningThread->State = 1;
+		RunningThread->State = READY;
 		Schedule();
 
 	}
@@ -416,6 +432,9 @@ HANDLE UtCreate32 (UT_FUNCTION Function, UT_ARGUMENT Argument) {
 	//Insert the link of alive thread
 	InsertTailList(&AliveThreads, &Thread->AliveLink);
 	
+	InitializeListHead(&Thread->Joiners);
+
+
 	return (HANDLE)Thread;
 }
 

@@ -77,7 +77,7 @@ VOID TestAlive_Thread(UT_ARGUMENT Argument) {}
 
 VOID ThreadToSwitch2_Thread(UT_ARGUMENT Argument) {
 	_ASSERT(UtThreadState(h2) == RUNNING);
-	//_ASSERT(UtThreadState(h1) == READY);
+	_ASSERT(UtThreadState(h1) == READY);
 	printf("\n ********** I AM THREAD 2 **************\n");
 	printf("\n After calling UtSwitchTo \n");
 	printf("\n Running thread state (Thread 2): %d  -->RUNNING \n", UtThreadState(h2));
@@ -92,6 +92,26 @@ VOID ThreadToSwitch1_Thread(UT_ARGUMENT Argument) {
 	printf("\n After Switch (Thread 1 state): %d \n", UtThreadState(h1));
 }
 
+VOID Join2_Thread(UT_ARGUMENT Argument) { printf("\n ********** I AM THREAD 2 **************\n"); }
+
+VOID Join3_Thread(UT_ARGUMENT Argument) { printf("\n ********** I AM THREAD 3 **************\n"); }
+
+VOID Join4_Thread(UT_ARGUMENT Argument) { printf("\n ********** I AM THREAD 4 **************\n"); }
+
+VOID Join5_Thread(UT_ARGUMENT Argument) { printf("\n ********** I AM THREAD 5 **************\n"); }
+
+
+VOID Join1_Thread(UT_ARGUMENT Argument) {
+	printf("\n ********** I AM RUNNING THREAD (1) **************\n");
+	HANDLE h2 = UtCreate(Join2_Thread, (UT_ARGUMENT)('2'));
+	HANDLE h3 = UtCreate(Join3_Thread, (UT_ARGUMENT)('3'));
+	HANDLE h4 = UtCreate(Join4_Thread, (UT_ARGUMENT)('4'));
+	HANDLE h5 = UtCreate(Join5_Thread, (UT_ARGUMENT)('5'));
+	HANDLE handle[4];
+	handle[0] = h2; handle[1] = h3; handle[2] = h4; handle[3] = h5;
+	UtMultJoin(handle, 4);
+	printf("\n ********** I AM RUNNING THREAD (1) **************\n");
+}
 
 
 VOID TestState ()  {
@@ -136,8 +156,18 @@ VOID TestSwitch() {
 	printf("\n\n END Test Part I 1. c) \n");
 }
 
+VOID TestMultJoin() {
+	printf("\n BEGIN Test Part I 1. d) \n\n");
+
+	h1 = UtCreate(Join1_Thread, (UT_ARGUMENT)('1'));
+
+	UtRun();
+
+	printf("\n\n END Test Part I 1. d) \n");
+}
 
 int main () {
+	/*
 	//TEST 1. a)
 	UtInit();
 	TestState();		 
@@ -151,6 +181,11 @@ int main () {
 	//TEST 1. c)
 	UtInit();
 	TestSwitch();
+	UtEnd()*/
+
+	//TEST 1. d)
+	UtInit();
+	TestMultJoin();
 	UtEnd();
 
 	return 0;
