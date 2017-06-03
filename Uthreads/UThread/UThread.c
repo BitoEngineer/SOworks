@@ -213,7 +213,11 @@ VOID UtExit () {
 	while (!IsListEmpty(&RunningThread->Joiners)) {
 		PLIST_ENTRY tlink = RemoveHeadList(&RunningThread->Joiners);
 		PUTHREAD thread = CONTAINING_RECORD(tlink, UTHREAD, Link);
-		UtActivate(thread);
+		//UtActivate(thread); doesn't work because we need
+		//to run the joined thread so it needs to be at the head
+		//of readyqueue and not in the tail
+		InsertHeadList(&ReadyQueue, &thread->Link);
+		thread->State = RUNNING;
 	}
 	InternalExit(RunningThread, ExtractNextReadyThread());
 	_ASSERTE(!"Supposed to be here!");
@@ -236,11 +240,11 @@ BOOL UtMultJoin(HANDLE handle[], int size) {
 
 	//Transiction from RUNNING to BLOCKED
 	InsertTailList(&((PUTHREAD)handle[0])->Joiners, &RunningThread->Link);
-	((PUTHREAD)handle[0])->State = BLOCKED;
+	//RemoveEntryList(&ReadyQueue, &((PUTHREAD)handle[0])->Link);
 
 	for (int i = 1; i < size;++i) {
 		InsertTailList(&((PUTHREAD)handle[i])->Joiners, &((PUTHREAD)handle[i-1])->Link);
-		((PUTHREAD)handle[i])->State = BLOCKED;
+		//RemoveEntryList(&ReadyQueue, &((PUTHREAD)handle[i])->Link);
 	}
 
 	InsertHeadList(&ReadyQueue, &((PUTHREAD)handle[size - 1])->Link);

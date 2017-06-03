@@ -1,5 +1,2 @@
-﻿  SimpleTest.cpp
-c:\users\bitoengineer\desktop\faculdade\so\2º trabalho\parte i\soworks\uthreads\simpletest\simpletest.cpp(53): warning C4302: 'type cast': truncation from 'UT_ARGUMENT' to 'UCHAR'
-c:\users\bitoengineer\desktop\faculdade\so\2º trabalho\parte i\soworks\uthreads\simpletest\simpletest.cpp(52): warning C4101: 'Index': unreferenced local variable
-  SimpleTest.vcxproj -> C:\Users\BitoEngineer\Desktop\Faculdade\SO\2º Trabalho\Parte I\SOworks\Uthreads\Debug\SimpleTest.exe
+﻿  SimpleTest.vcxproj -> C:\Users\BitoEngineer\Desktop\Faculdade\SO\2º Trabalho\Parte I\SOworks\Uthreads\Debug\SimpleTest.exe
   SimpleTest.vcxproj -> C:\Users\BitoEngineer\Desktop\Faculdade\SO\2º Trabalho\Parte I\SOworks\Uthreads\Debug\SimpleTest.pdb (Full PDB)

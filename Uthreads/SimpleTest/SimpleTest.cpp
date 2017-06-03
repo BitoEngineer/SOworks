@@ -167,7 +167,7 @@ VOID TestMultJoin() {
 }
 
 int main () {
-	/*
+	
 	//TEST 1. a)
 	UtInit();
 	TestState();		 
@@ -181,7 +181,7 @@ int main () {
 	//TEST 1. c)
 	UtInit();
 	TestSwitch();
-	UtEnd()*/
+	UtEnd();
 
 	//TEST 1. d)
 	UtInit();
